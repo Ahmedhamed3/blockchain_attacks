@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockchain Attacks Playground</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Smart Contract Security Playground</h1>
+      <p>Reentrancy + Access Control vulnerabilities vs. CEI + onlyOwner fixes.</p>
+    </header>
+
+    <section class="panel">
+      <h2>1) Connection &amp; Status</h2>
+      <button id="connectBtn">Connect Wallet</button>
+      <div class="status-row">
+        <div><strong>Account:</strong> <span id="account">-</span></div>
+        <div><strong>Network:</strong> <span id="network">-</span> <span id="networkWarning" class="warning"></span></div>
+      </div>
+
+      <div class="selector">
+        <label><input type="radio" name="contract" value="vuln" checked /> Vulnerable Contract</label>
+        <label><input type="radio" name="contract" value="safe" /> Safe Contract</label>
+      </div>
+
+      <div class="status-row">
+        <div><strong>Selected Address:</strong> <span id="contractAddress">-</span></div>
+        <div><strong>Contract Balance:</strong> <span id="contractBalance">0</span> ETH</div>
+      </div>
+      <div class="status-row">
+        <div><strong>Target:</strong> <span id="targetAmount">0</span> ETH</div>
+        <div><strong>Total Raised:</strong> <span id="totalRaised">0</span> ETH</div>
+      </div>
+      <button id="refreshBtn">Refresh Stats</button>
+    </section>
+
+    <section class="panel">
+      <h2>2) Normal User Actions</h2>
+      <div class="form-row">
+        <label for="contributionAmount">Contribution (ETH):</label>
+        <input type="number" id="contributionAmount" min="0" step="0.01" />
+        <button id="contributeBtn">Contribute</button>
+      </div>
+      <div class="form-row">
+        <button id="refundBtn">Request Refund</button>
+        <span><strong>Your contribution:</strong> <span id="userContribution">0</span> ETH</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>3) Owner &amp; Attacker Actions</h2>
+      <div class="subpanel">
+        <h3>Owner Zone</h3>
+        <p class="note">In the vulnerable contract, this withdraw button is callable by <em>anyone</em> because of the missing access control bug.</p>
+        <button id="withdrawBtn">Owner Withdraw</button>
+      </div>
+
+      <div class="subpanel">
+        <h3>Attacker Zone</h3>
+        <label for="attackerAddress">Deployed ReentrancyAttacker address:</label>
+        <input type="text" id="attackerAddress" placeholder="0x..." />
+        <div class="form-row">
+          <label for="attackAmount">Attack deposit (ETH):</label>
+          <input type="number" id="attackAmount" min="0" step="0.01" />
+          <button id="attackBtn">Run Attack (on Vulnerable Contract)</button>
+        </div>
+        <div class="status-row">
+          <div><strong>Attacker Balance:</strong> <span id="attackerBalance">0</span> ETH</div>
+          <div><strong>Attack Status:</strong> <span id="attackStatus">-</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Logs</h2>
+      <div id="logs"></div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
